@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/p5.js"></script>
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Game of Life</title>
+</head>
+<body>
+<div class="content" id="content">
+    <div id="pause-icon">
+        <i class="lni lni-pause"></i>
+    </div>
+    <div class="btn-container">
+        <a class="btn btn-clear" onclick="clear_game()" href="#">
+            <div class="btn-icon">
+                <i class="lni lni-eraser"></i>
+            </div>
+            <div class="btn-text">
+                Clear
+            </div>
+        </a>
+        <a class="btn btn-reset" onclick="reset()" href="#">
+            <div class="btn-icon">
+                <i class="lni lni-spinner-arrow"></i>
+            </div>
+            <div class="btn-text">
+                Reset
+            </div>
+        </a>
+        <a class="btn btn-pause" onclick="pause()" href="#">
+            <div class="btn-icon">
+                <i class="lni lni-pause"></i>
+            </div>
+            <div class="btn-text" id="btn-pause-text">
+                Pause
+            </div>
+        </a>
+    </div>
+</div>
+<script type="module">
+    import {create_game_of_life_display} from "./js/types/game_of_life.js";
+    create_game_of_life_display(32, 32);
+</script>
+</body>
+</html>
