@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/tinycolor.js"></script>
     <script src="js/p5.js"></script>
     <link rel="stylesheet" href="css/icons.css">
     <link rel="stylesheet" href="css/style.css">
@@ -31,6 +32,14 @@
                 Reset
             </div>
         </a>
+        <a class="btn btn-reset" onclick="randomize_game()" href="#">
+            <div class="btn-icon">
+                <i class="lni lni-shuffle"></i>
+            </div>
+            <div class="btn-text">
+                Randomize
+            </div>
+        </a>
         <a class="btn btn-pause" onclick="pause_game()" href="#">
             <div class="btn-icon">
                 <i class="lni lni-pause"></i>
@@ -42,8 +51,8 @@
     </div>
 </div>
 <script type="module">
-    import {create_game_of_life_display} from "./js/types/game_of_life.js";
-    create_game_of_life_display(32, 32);
+    import {create_lenia_display} from "./js/types/lenia_fft.js";
+    create_lenia_display(128, 128);
 </script>
 </body>
 </html>

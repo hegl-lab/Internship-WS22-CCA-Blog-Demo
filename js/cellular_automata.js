@@ -34,6 +34,7 @@ export class CellularAutomateDisplay {
         p5.setup = function () {
             p5.createCanvas(display.width, display.height);
             p5.windowResized();
+            p5.frameRate(13);
         }
 
         p5.draw = function () {
@@ -43,7 +44,7 @@ export class CellularAutomateDisplay {
             if (p5.mouseIsPressed) {
                 let x = Math.floor(p5.mouseX / display.scale);
                 let y = Math.floor(p5.mouseY / display.scale);
-                if (x >= display.width || y >= display.width) return;
+                if (x >= display.width || y >= display.width || x < 0 || y < 0) return;
                 display.cellular_automata.on_click(x, y);
             }
         }

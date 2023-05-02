@@ -15,10 +15,5 @@ export class IFrameObserver {
 
     handleIntersect(entries, observer) {
         this.active = entries[0].isIntersecting;
-        if (this.active) {
-            console.log("START DRAWING");
-        } else {
-            console.log("STOP DRAWING");
-        }
     }
 }

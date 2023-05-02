@@ -1,7 +1,7 @@
 import {CellularAutomateDisplay} from "../cellular_automata.js";
 
 export class Lenia {
-    constructor(width, height, dt = 0.1, R = 13, m = 0.135, s = 0.015) {
+    constructor(width, height, dt = 0.1, R = 13, m = 0.15, s = 0.015) {
         this.width = width;
         this.height = height;
         this.dt = dt;
@@ -14,14 +14,18 @@ export class Lenia {
 
         this.K = this.#create_empty_matrix(2 * R + 1, 2 * R + 1)
         let sum = 0;
-        //let offset = R - 1;
+
         for (let i = 0; i < 2 * R + 1; ++i) {
             for (let j = 0; j < 2 * R + 1; ++j) {
                 let value = Math.sqrt(
                     Math.pow(i - R, 2) +
                     Math.pow(j - R, 2)
                 ) / R;
-                value = this.#bell_function(value, 0.5, 0.15);
+                if (value < 1) {
+                    value = this.#bell_function(value, 0.5, 0.15);
+                } else {
+                    value = 0;
+                }
                 this.K[i][j] = value;
                 sum += value;
             }
@@ -31,7 +35,6 @@ export class Lenia {
                 this.K[i][j] /= sum;
             }
         }
-        this.K[R][R] = 0.0;
     }
 
     #get_state(x, y) {
@@ -78,11 +81,38 @@ export class Lenia {
         this.state = new_state;
     }
 
+
+    #clamp_color(color) {
+        color[0] = Math.max(Math.min(color[0], 1), 0);
+        color[1] = Math.max(Math.min(color[1], 1), 0);
+        color[2] = Math.max(Math.min(color[2], 1), 0);
+    }
+
+    #hue_rotation(value, p5) {
+        value = 1 - value;
+        value /= 1.45;
+        let color = [0, 0, 0];
+        color[0] = ((6 * value) % 6) - 3;
+        color[1] = ((6 * value + 4) % 6) - 3;
+        color[2] = ((6 * value + 2) % 6) - 3;
+        color[0] = Math.abs(color[0]);
+        color[1] = Math.abs(color[1]);
+        color[2] = Math.abs(color[2]);
+        color[0] -= 1;
+        color[1] -= 1;
+        color[2] -= 1;
+        this.#clamp_color(color);
+
+        let offset = 0.5 * 255;
+        let factor = 1.0 * (1.0 - Math.abs(2.0 * 0.5 - 1.0)) * 255;
+        return p5.color(offset + (color[0] - 0.5) * factor, offset + (color[1] - 0.5) * factor, offset + (color[2] - 0.5) * factor);
+    }
+
     draw(p5) {
         p5.push();
         for (let x = 0; x < this.width; ++x) {
             for (let y = 0; y < this.height; ++y) {
-                p5.set(x, y, this.state[x][y] * 255);
+                p5.set(x, y, this.#hue_rotation(this.state[x][y], p5));
             }
         }
         p5.updatePixels();
@@ -162,4 +192,14 @@ export class Lenia {
 export function create_lenia_display(width, height) {
     let display = new CellularAutomateDisplay(width, height, new Lenia(width, height));
     new p5(display.sketch);
+}
+
+export function benchmark_lenia(width, height) {
+    let lenia = new Lenia(width, height);
+    const start = Date.now();
+    for (let i = 0; i < 1000; ++i) {
+        lenia.step();
+    }
+    const end = Date.now();
+    console.log(`Execution time for 1'000 executions: ${end - start}ms`);
 }
